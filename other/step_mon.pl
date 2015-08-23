@@ -2,7 +2,7 @@
 ###############################################################################
 ##
 ## Monitor script contributed by George Bouras (Greece 02/2015).
-## A demonstration for MCE->enq(...) in MCE 1.601.
+## A demonstration for MCE->enq and MCE->await in MCE 1.700.
 ##
 ###############################################################################
 
