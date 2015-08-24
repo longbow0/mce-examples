@@ -1,4 +1,4 @@
-## Many-Core Engine (MCE) for Perl - Examples
+## Many-Core Engine for Perl - Examples
 
 Various examples, not included with the Perl MCE distribution, are saved here.
 They are organized into sub directories.
