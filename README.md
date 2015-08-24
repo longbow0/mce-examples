@@ -1,7 +1,7 @@
 ## Many-Core Engine for Perl - Examples
 
 Various examples, not included with the Perl MCE distribution, are saved here.
-They are organized into sub directories.
+They are organized into sub-directories.
 
     asynchrony/dnslookup_ae.pl, dnslookup_ioa.pl, echoserver_ae.pl,
         echoserver_ioa.pl, echoserver_mojo.pl, echoserver_poe.pl,
