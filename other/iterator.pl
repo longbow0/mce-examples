@@ -107,7 +107,7 @@ sub preserve_order {
 ## use MCE::Flow;    ## Same thing in MCE 1.5+
 ##
 ## MCE::Flow::init {
-##    max_workers => 'auto', chunk_size => 1
+##    max_workers => 4, chunk_size => 1
 ## };
 ##
 ## sub _func {
@@ -130,7 +130,7 @@ sub preserve_order {
 
 my $mce = MCE->new(
 
-   max_workers => 'auto', chunk_size => 1, gather => preserve_order,
+   max_workers => 4, chunk_size => 1, gather => preserve_order,
 
    user_func => sub {
       my ($mce, $chunk_ref, $chunk_id) = @_;

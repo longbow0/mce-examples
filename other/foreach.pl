@@ -9,8 +9,8 @@
 ## Output was directed to >/dev/null.
 ##
 ## Parallel::Loops:     1,600  Forking each @input is expensive
-## MCE->foreach...:    23,000  Workers persist between each @input
-## MCE->forseq....:   200,000  Uses sequence of numbers as input
+## MCE->foreach...:    30,000  Workers persist between each @input
+## MCE->forseq....:   150,000  Uses sequence of numbers as input
 ## MCE->forchunk..:   800,000  IPC overhead is greatly reduced
 ##
 ## usage: foreach.pl [ size ]
@@ -64,7 +64,7 @@ sub preserve_order {
 ## use MCE::Flow;    ## Same thing in MCE 1.5+
 ##
 ## mce_flow {
-##    max_workers => 'auto', chunk_size => 1, gather => preserve_order
+##    max_workers => 4, chunk_size => 1, gather => preserve_order
 ## },
 ## sub {
 ##    my ($mce, $chunk_ref, $chunk_id) = @_;
@@ -73,7 +73,7 @@ sub preserve_order {
 ## }, @input_data;
 
 my $mce = MCE->new(
-   max_workers => 'auto', chunk_size => 1, gather => preserve_order
+   max_workers => 4, chunk_size => 1, gather => preserve_order
 );
 
 ## Use $chunk_ref->[0] or $_ to retrieve the single element.
