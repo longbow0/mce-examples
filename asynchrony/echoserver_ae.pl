@@ -16,9 +16,8 @@ use Scalar::Util 'refaddr';
 
 use MCE::Flow;
 use MCE::Shared;
-use MCE::Number;
 
-my $id   = MCE::Number->new(0);
+my $id   = MCE::Shared->scalar(0);
 my $ncpu = MCE::Util::get_ncpu;
 
 my $mce_task = sub {
@@ -30,7 +29,7 @@ my $mce_task = sub {
       my ($fh, $host, $port) = @_;
       my ($disconnect, $next_id, $hdl);
 
-      $next_id = $id->Incr();
+      $next_id = $id->incr();
 
       $disconnect = sub {
          my ($hdl) = @_;

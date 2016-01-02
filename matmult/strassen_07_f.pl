@@ -18,15 +18,6 @@ use PDL::IO::FastRaw;
 use MCE::Signal qw($tmp_dir -use_dev_shm);
 use MCE;
 
-my $pdl_version = sprintf("%20s", $PDL::VERSION); $pdl_version =~ s/_.*$//;
-my $chk_version = sprintf("%20s", '2.4.10');
-
-if ($^O eq 'MSWin32' && $pdl_version lt $chk_version) {
-   print "This script requires PDL 2.4.10 or later for PDL::IO::FastRaw\n";
-   print "to work under the Windows environment.\n";
-   exit 1;
-}
-
 ###############################################################################
  # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * #
 ###############################################################################

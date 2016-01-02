@@ -12,7 +12,7 @@ use Data::Dump 'pp';
 use MCE::Flow;
 use MCE::Shared;
 
-my %all_addrs : Shared;   # shared hash
+tie my %all_addrs, 'MCE::Shared';
 
 my @hosts = qw( www.google.com www.facebook.com www.iana.org );
 
@@ -48,5 +48,5 @@ my $mce_task = sub {
 
 MCE::Flow->run( $mce_opts, $mce_task, @hosts );
 
-print {*STDERR} pp(\%all_addrs), "\n";
+print {*STDERR} pp( tied(%all_addrs)->export() ), "\n";
 

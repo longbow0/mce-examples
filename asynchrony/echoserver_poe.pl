@@ -13,9 +13,8 @@ use POE qw( Component::Server::TCP );
 
 use MCE::Flow;
 use MCE::Shared;
-use MCE::Number;
 
-my $id   = MCE::Number->new(0);
+my $id   = MCE::Shared->scalar(0);
 my $ncpu = MCE::Util::get_ncpu;
 
 my $mce_task = sub {
@@ -30,7 +29,7 @@ my $mce_task = sub {
          warn "[$pid:0] listening on 0.0.0.0:$port\n";
       },
       ClientConnected => sub {
-         $_[HEAP]{next_id} = $id->Incr();
+         $_[HEAP]{next_id} = $id->incr();
          POE::Kernel->delay( ping => 5 );
       },
       ClientInput => sub {

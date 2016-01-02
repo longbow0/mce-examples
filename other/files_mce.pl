@@ -7,11 +7,11 @@ use warnings;
 
 use Time::HiRes 'sleep';
 
-use MCE;
+use MCE Sereal => 1;
 use MCE::Queue;
 
-my $D = MCE::Queue->new(queue => [ $ARGV[0] || '.' ]);
-my $F = MCE::Queue->new(fast => defined $ARGV[1] ? $ARGV[1] : 1);
+my $D = MCE::Queue->new( queue => [ $ARGV[0] || '.' ] );
+my $F = MCE::Queue->new( fast  => defined $ARGV[1] ? $ARGV[1] : 1 );
 
 my $providers = 3;
 my $consumers = 8;

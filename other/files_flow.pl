@@ -3,16 +3,16 @@
 use strict;
 use warnings;
 
-## Same logic as in files_mce.pl, but with the MCE::Flow model.
+## Same logic as in files_mce.pl, but with the MCE::Flow and MCE::Shared.
 ## usage: ./files_flow.pl [ startdir [0|1] ]
 
 use Time::HiRes 'sleep';
 
-use MCE::Flow;
-use MCE::Queue;
+use MCE::Flow   Sereal => 1;
+use MCE::Shared Sereal => 1;
 
-my $D = MCE::Queue->new(queue => [ $ARGV[0] || '.' ]);
-my $F = MCE::Queue->new(fast => defined $ARGV[1] ? $ARGV[1] : 1);
+my $D = MCE::Shared->queue( queue => [ $ARGV[0] || '.' ] );
+my $F = MCE::Shared->queue( fast  => defined $ARGV[1] ? $ARGV[1] : 1 );
 
 my $providers = 3;
 my $consumers = 8;

@@ -20,15 +20,6 @@ use PDL::IO::Storable;                   ## Required for passing PDL data
 use MCE::Signal qw($tmp_dir -use_dev_shm);
 use MCE;
 
-my $pdl_version = sprintf("%20s", $PDL::VERSION); $pdl_version =~ s/_.*$//;
-my $chk_version = sprintf("%20s", '2.4.10');
-
-if ($^O eq 'MSWin32' && $pdl_version lt $chk_version) {
-   print "This script requires PDL 2.4.10 or later for PDL::IO::FastRaw\n";
-   print "to work under the Windows environment.\n";
-   exit 1;
-}
-
 ###############################################################################
  # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * # * #
 ###############################################################################
@@ -48,10 +39,9 @@ my $step_size = ($tam > 2048) ? 24 : ($tam > 1024) ? 16 : 8;
 my $mce = configure_and_spawn_mce($n_workers);
 
 my $a = sequence $cols,$rows;
-my $b = sequence $rows,$cols;
 my $c = zeroes   $rows,$rows;
 
-writefraw($b, "$tmp_dir/b");
+writefraw( sequence($rows,$cols), "$tmp_dir/b" );
 
 my $start = time;
 

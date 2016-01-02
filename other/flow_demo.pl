@@ -3,18 +3,22 @@
 use strict;
 use warnings;
 
-use MCE::Flow Sereal => 1;        # Use Sereal for serialization if available
-use MCE::Queue  fast => 1;        # MCE 1.520 (compare with => 0, also Sereal)
+use MCE::Flow   Sereal => 1;      # Use Sereal for serialization if available
+use MCE::Shared Sereal => 1;
 
 # Results from CentOS 7 VM (4 cores): time flow_demo.pl | wc -l
 #
-# Sereal 0, fast 0:   4.703s      # Serialization via Storable
-# Sereal 1, fast 0:   3.926s      # Serialization via Sereal
-# Sereal 1, fast 1:   2.092s      # Enable fast optimization; crazy :)
+# Sereal 0, fast 0:   2.323s      # Serialization via Storable
+# Sereal 1, fast 0:   1.765s      # Serialization via Sereal
+# Sereal 1, fast 1:   1.361s      # With fast optimization
 
-my $setter_q = MCE::Queue->new;
-my $pinger_q = MCE::Queue->new;
-my $writer_q = MCE::Queue->new;
+my $setter_q = MCE::Shared->queue( fast => 1, await => 1 );
+my $pinger_q = MCE::Shared->queue( fast => 1, await => 1 );
+my $writer_q = MCE::Shared->queue( fast => 1, await => 1 );
+
+# Start the Shared server ( may be ommitted if Perl has IO::FDPass ).
+
+MCE::Shared::start();
 
 # See https://metacpan.org/pod/MCE::Core#SYNTAX-for-INPUT_DATA for a DBI
 # input iterator (db_iter). Set chunk_size accordingly. Do not go above
@@ -81,16 +85,25 @@ sub poller {
       }
    }
 
-   $pinger_q->enqueue( [ \@pinger_w, $chunk_id, 'ping' ] ) if @pinger_w;
-   $setter_q->enqueue( [ \@setter_w, $chunk_id, 'set ' ] ) if @setter_w;
-   $setter_q->enqueue( [ \@writer_w, $chunk_id, 'ok  ' ] ) if @writer_w;
+   if ( @pinger_w ) {
+      $pinger_q->await(120); # wait until pinger has 120 or below items
+      $pinger_q->enqueue( [ \@pinger_w, $chunk_id, 'ping' ] );
+   }
+   if ( @setter_w ) {
+      $setter_q->await(120); # ditto for the setter queue
+      $setter_q->enqueue( [ \@setter_w, $chunk_id, 'set ' ] );
+   }
+   if ( @writer_w ) {
+      $writer_q->await(120); # ditto for the writer queue
+      $writer_q->enqueue( [ \@writer_w, $chunk_id, 'ok  ' ] );
+   }
 
    return;
 }
 
 sub setter {
    my ($mce) = @_;
- # MCE->yield;                    # adjust interval option below; 0.007
+ # MCE->yield;                    # adjust interval option below; 0.008
 
    while (defined (my $next_ref = $setter_q->dequeue)) {
       my ($chunk_ref, $chunk_id, $status) = @{ $next_ref };
@@ -102,7 +115,7 @@ sub setter {
 
 sub pinger {
    my ($mce) = @_;
- # MCE->yield;                    # all workers are assigned interval slot
+ # MCE->yield;                    # all workers are assigned an interval slot
 
    while (defined (my $next_ref = $pinger_q->dequeue)) {
       my ($chunk_ref, $chunk_id, $status) = @{ $next_ref };
@@ -139,7 +152,7 @@ my $n_writers =   4;
 
 MCE::Flow::init {
    chunk_size => 300, input_data => make_number_iter(1, 2_000_000),
-   interval => 0.007, user_begin => \&_begin, user_end => \&_end,
+   interval => 0.008, user_begin => \&_begin, user_end => \&_end,
 
    task_name   => [ 'poller',   'setter',   'pinger',   'writer'   ],
    max_workers => [ $n_pollers, $n_setters, $n_pingers, $n_writers ],

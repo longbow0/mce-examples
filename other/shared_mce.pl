@@ -1,10 +1,8 @@
 #!/usr/bin/env perl
 ###############################################################################
 ## ----------------------------------------------------------------------------
-## This script, similar to the forseq.pl example as far as usage goes, utilizes
-## MCE::Shared to store results into a hash.
-##
-##   my %results : Shared;
+## This script, similar to the forseq.pl example as far as usage goes.
+## Utilizes MCE::Shared to store results into a hash.
 ##
 ## usage: shared_mce.pl [ size ]
 ## usage: shared_mce.pl [ begin end [ step [ format ] ] ]
@@ -24,7 +22,7 @@ use warnings;
 use Time::HiRes qw(time);
 
 use MCE::Loop;
-use MCE::Shared;
+use MCE::Shared Sereal => 1;
 
 my $prog_name = $0; $prog_name =~ s{^.*[\\/]}{}g;
 my $s_begin   = shift || 3000;
@@ -50,21 +48,21 @@ unless (defined $s_end) {
 
 MCE::Loop::init { chunk_size => 1, max_workers => 'auto' };
 
-my %results : Shared;
+my $results = MCE::Shared->hash();
 my $start = time;
 
 mce_loop_s {
-   $results{$_} = sprintf "n: %s sqrt(n): %f\n", $_, sqrt($_);
+   $results->{$_} = sprintf "n: %s sqrt(n): %f\n", $_, sqrt($_);
 } $s_begin, $s_end, $s_step, $s_format;
 
-my $lcopy = tied(%results)->Export;
+my $hashref = $results->destroy;
 
 if ($s_begin <= $s_end) {
- # print $results{$_} foreach (sort { $a <=> $b } keys %results);
-   print $lcopy->{$_} foreach (sort { $a <=> $b } keys %$lcopy);
+ # print $results->{$_} foreach (sort { $a <=> $b } keys %$results);
+   print $hashref->{$_} foreach (sort { $a <=> $b } keys %$hashref);
 } else {
- # print $results{$_} foreach (sort { $b <=> $a } keys %results);
-   print $lcopy->{$_} foreach (sort { $b <=> $a } keys %$lcopy);
+ # print $results->{$_} foreach (sort { $b <=> $a } keys %$results);
+   print $hashref->{$_} foreach (sort { $b <=> $a } keys %$hashref);
 }
 
 printf {*STDERR} "\n## Compute time: %0.03f\n\n", time - $start;

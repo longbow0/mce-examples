@@ -1,10 +1,8 @@
 #!/usr/bin/env perl
 ###############################################################################
 ## ----------------------------------------------------------------------------
-## This script, similar to the forseq.pl example as far as usage goes, utilizes
-## threads::shared to store results into a hash.
-##
-##   my %results : shared;
+## This script, similar to the forseq.pl example as far as usage goes.
+## Utilizes threads::shared to store results into a hash.
 ##
 ## usage: shared_thr.pl [ size ]
 ## usage: shared_thr.pl [ begin end [ step [ format ] ] ]
