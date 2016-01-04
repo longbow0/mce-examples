@@ -3,31 +3,34 @@
 Various examples, not included with the Perl MCE distribution, are saved here.
 They are organized into sub-directories.
 
-    asynchrony/dnslookup_ae.pl, dnslookup_ioa.pl, echoserver_ae.pl,
+    asynchrony/ dnslookup_ae.pl, dnslookup_ioa.pl, echoserver_ae.pl,
         echoserver_ioa.pl, echoserver_mojo.pl, echoserver_poe.pl,
         Parallel concurrency, asynchrony, and shared data.
 
-    asynchrony/fastping_ae.pl
+    asynchrony/ fastping_ae.pl
         Report failed IP addresses to standard output.
 
-    biofasta/fasta_aidx.pl, fasta_rdr*.pl
+    biofasta/ fasta_aidx.pl, fasta_rdr*.pl
         Parallel demonstration for Bioinformatics.
 
-    matmult/matmult_base*.pl, matmult_mce*.pl, strassen_mce*.pl
+    fibonacci/ fibprime-hobo.pl, fibprime-mce.pl, fibprime-threads.pl
+        Math::Prime::Util parallel demonstration
+
+    matmult/ matmult_base*.pl, matmult_mce*.pl, strassen_mce*.pl
         Various matrix multiplication demonstrations benchmarking
         PDL, PDL + MCE, as well as parallelizing Strassen's
         divide-and-conquer algorithm. Included are 2 plain
         Perl examples.
 
-    sampledb/create.pl, query*.pl, update*.pl
+    sampledb/ create.pl, query*.pl, update*.pl
         Examples demonstrating DBI (SQLite) with MCE.
 
-    tbray/wf_mce1.pl, wf_mce2.pl, wf_mce3.pl
+    tbray/ wf_mce1.pl, wf_mce2.pl, wf_mce3.pl
         An implementation of wide finder utilizing MCE.
         As fast as MMAP IO when file resides in OS FS cache.
         2x ~ 3x faster when reading directly from disk.
 
-The rest are located inside the "other" directory.
+The rest are placed inside the "other" directory.
 
     cat.pl, egrep.pl, wc.pl
         Concatenation, egrep, and word count scripts similar to the
