@@ -66,7 +66,7 @@ my @threads;
 push @threads, threads->create('fibprime', $_) for 1 .. $nthreads;
 
 # Let the threads work for a little before starting the display loop
-sleep 5;
+sleep 2;
 my $n = 0;
 lock(@karray);
 while (1) {
