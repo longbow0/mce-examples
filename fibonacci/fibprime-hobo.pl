@@ -38,11 +38,16 @@ my @threads;
 push @threads, MCE::Hobo->create('fibprime', $_) for 1 .. $nthreads;
  
 # Let the threads work for a little before starting the display loop
-sleep 4; my $n = 0;
+my $n = 0; my $delay_output = 1;
+sleep 2;
 
 while (1) {
    $cv->wait(); # Someone has found a result.
    $cv->lock();
+   if ($delay_output) {
+      $cv->unlock(), next if ($found->length < 26);
+      $delay_output = 0;
+   }
    my $copy = $found->flush();  # pair(s) ( $nth, $k." ".$time_int )
    $cv->unlock();
    foreach ( sort { $a <=> $b } $copy->keys ) {
