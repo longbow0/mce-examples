@@ -45,7 +45,7 @@ while (1) {
    $cv->wait(); # Someone has found a result.
    $cv->lock();
    if ($delay_output) {
-      $cv->unlock(), next if ($found->length < 26);
+      $cv->unlock(), next if ($found->len < 26);
       $delay_output = 0;
    }
    my $copy = $found->flush();  # pair(s) ( $nth, $k." ".$time_int )
