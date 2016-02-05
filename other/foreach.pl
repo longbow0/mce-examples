@@ -4,7 +4,7 @@
 ## This example demonstrates the sqrt example from Parallel::Loops
 ## (Parallel::Loops v0.07 utilizing Parallel::ForkManager v1.07).
 ##
-## Testing was on a Linux VM; Perl v5.20.1; Haswell i7 at 2.6 GHz.
+## Testing was on a Linux VM; Perl v5.16.3; Haswell i7 at 2.6 GHz.
 ## The number indicates the size of input displayed in 1 second.
 ## Output was directed to >/dev/null.
 ##

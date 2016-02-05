@@ -20,11 +20,12 @@ my $num_workers = 8;
 my $count = MCE::Shared->condvar(0);
 my $state = MCE::Shared->scalar('ready');
 
-## Lock is released when calling ->broadcast, ->signal, ->timedwait, or ->wait.
-## Thus, re-obtain the lock for synchronization afterwards if desired.
-
-## Sleeping with small values is expensive on Cygwin (imo); 0 to disable.
 my $microsecs = ($^O eq 'cygwin') ? 0 : 200;
+
+# The lock is released upon calling ->broadcast, ->signal, ->timedwait,
+# or ->wait. For performance reasons, the variable is *not* re-locked
+# after the call. Therefore, re-lock the variable for synchronization
+# afterwards if necessary.
 
 sub barrier_sync {
     usleep($microsecs) until $state->get eq 'ready' or $state->get eq 'up';
@@ -62,11 +63,11 @@ my $mce = MCE->new(
 
 printf {*STDERR} "\nduration: %0.3f\n\n", time() - $start;
 
-## Time taken from a 2.6 GHz machine running Mac OS X.
-##
-## threads::shared:   0.238s  threads
-##   forks::shared:  36.426s  child processes
-##     MCE::Shared:   0.397s  child processes
-##        MCE Sync:   0.062s  child processes
-##
+# Time taken from a 2.6 GHz machine running Mac OS X.
+#
+# threads::shared:   0.238s  threads
+#   forks::shared:  36.426s  child processes
+#     MCE::Shared:   0.397s  child processes
+#        MCE Sync:   0.062s  child processes
+#
 
