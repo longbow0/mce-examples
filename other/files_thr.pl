@@ -10,7 +10,7 @@ use threads::shared;
 
 use Time::HiRes 'sleep';
 
-use MCE Sereal => 1;
+use MCE;
 use Thread::Queue;
 
 my $D = Thread::Queue->new($ARGV[0] || '.');

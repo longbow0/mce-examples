@@ -7,7 +7,7 @@ use warnings;
 
 use Time::HiRes 'sleep';
 
-use MCE Sereal => 1;
+use MCE;
 use MCE::Queue;
 
 my $D = MCE::Queue->new( queue => [ $ARGV[0] || '.' ] );

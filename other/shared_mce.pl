@@ -22,7 +22,7 @@ use warnings;
 use Time::HiRes qw(time);
 
 use MCE::Loop;
-use MCE::Shared Sereal => 1;
+use MCE::Shared;
 
 my $prog_name = $0; $prog_name =~ s{^.*[\\/]}{}g;
 my $s_begin   = shift || 3000;

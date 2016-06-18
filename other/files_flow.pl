@@ -8,8 +8,8 @@ use warnings;
 
 use Time::HiRes 'sleep';
 
-use MCE::Flow   Sereal => 1;
-use MCE::Shared Sereal => 1;
+use MCE::Flow;
+use MCE::Shared;
 
 my $D = MCE::Shared->queue( queue => [ $ARGV[0] || '.' ] );
 my $F = MCE::Shared->queue( fast  => defined $ARGV[1] ? $ARGV[1] : 1 );

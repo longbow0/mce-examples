@@ -3,14 +3,13 @@
 use strict;
 use warnings;
 
-use MCE::Flow   Sereal => 1;      # Use Sereal for serialization if available
-use MCE::Shared Sereal => 1;
+use MCE::Flow;
+use MCE::Shared;
 
 # Results from CentOS 7 VM (4 cores): time flow_demo.pl | wc -l
 #
-# Sereal 0, fast 0:   2.323s      # Serialization via Storable
-# Sereal 1, fast 0:   1.765s      # Serialization via Sereal
-# Sereal 1, fast 1:   1.361s      # With fast optimization
+# fast 0:  1.765s
+# fast 1:  1.361s  # With fast optimization
 
 my $setter_q = MCE::Shared->queue( fast => 1, await => 1 );
 my $pinger_q = MCE::Shared->queue( fast => 1, await => 1 );
