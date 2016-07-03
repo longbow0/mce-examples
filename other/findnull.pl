@@ -53,7 +53,7 @@ DESCRIPTION
           Specify number of workers for MCE   -- default: auto
 
    --chunk-size CHUNK_SIZE
-          Specify chunk size for MCE          -- default: 2 MiB
+          Specify chunk size for MCE          -- default: 8 MiB
 
    -l     Display the number of lines for the file
 
@@ -74,7 +74,7 @@ EXIT STATUS
 my $flag = sub { 1; };
 my $isOk = sub { (@ARGV == 0 or $ARGV[0] =~ /^-/) ? usage() : shift @ARGV; };
 
-my $chunk_size  = '2m';
+my $chunk_size  = '8m';
 my $max_workers = 'auto';
 my $skip_args   = 0;
 
@@ -130,7 +130,7 @@ my $mce = MCE->new(
    chunk_size => $chunk_size, max_workers => $max_workers,
    input_data => $file, gather => preserve_order(),
    user_func  => \&user_func, use_slurpio => 1,
-   init_relay => 0
+   init_relay => 0, parallel_io => 1
 )->run;
 
 if ($l_flag) {

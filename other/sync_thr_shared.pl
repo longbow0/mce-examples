@@ -22,8 +22,7 @@ my $num_workers   = 8;
 my $count :shared = 0;
 my $state :shared = 'ready';
 
-## Sleeping with small values is expensive on Cygwin (imo); 0 to disable.
-my $microsecs = ($^O eq 'cygwin') ? 0 : 200;
+my $microsecs = ( lc $^O =~ /mswin|mingw|msys|cygwin/ ) ? 0 : 200;
 
 sub barrier_sync {
    usleep($microsecs) until $state eq 'ready' or $state eq 'up';

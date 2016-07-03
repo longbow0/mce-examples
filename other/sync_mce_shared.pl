@@ -20,7 +20,7 @@ my $num_workers = 8;
 my $count = MCE::Shared->condvar(0);
 my $state = MCE::Shared->scalar('ready');
 
-my $microsecs = ($^O eq 'cygwin') ? 0 : 200;
+my $microsecs = ( lc $^O =~ /mswin|mingw|msys|cygwin/ ) ? 0 : 200;
 
 # The lock is released upon calling ->broadcast, ->signal, ->timedwait,
 # or ->wait. For performance reasons, the variable is *not* re-locked
